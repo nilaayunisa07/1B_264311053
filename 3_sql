@@ -1,0 +1,11 @@
+USE fraud_detection_db;
+
+-- Laporan Ringkasan: jumlah peringatan fraud dan rata-rata skor fraud per pengguna
+SELECT
+    p.nama,
+    COUNT(pf.id_peringatan) AS total_peringatan,
+    ROUND(AVG(pf.skor_fraud), 2) AS rata_rata_skor
+FROM peringatan_fraud pf
+JOIN pengguna p ON pf.id_pengguna = p.id_pengguna
+WHERE pf.skor_fraud >= 60
+GROUP BY p.id_pengguna, p.nama;
