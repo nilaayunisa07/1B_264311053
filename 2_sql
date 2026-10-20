@@ -1,0 +1,50 @@
+USE fraud_detection_db;
+
+-- =====================================================
+-- 1. [CREATE] INSERT minimal 3 baris per tabel (total 9)
+-- Urutan: tabel induk dulu, baru tabel anak (karena ada FK)
+-- =====================================================
+
+-- Tabel induk 1: pengguna
+INSERT INTO pengguna (nama, status_verifikasi) VALUES
+('Anatasya Silvia Monica', 'Terverifikasi'),
+('Fauiruz Nadhir Rahmad', 'Belum Terverifikasi'),
+('Nila Ayunisa', 'Dibekukan');
+
+-- Tabel induk 2: model_deteksi
+INSERT INTO model_deteksi (nama_algoritma, pendekatan, mode_pemrosesan) VALUES
+('Random Forest', 'Supervised', 'Real-time'),
+('Isolation Forest', 'Unsupervised', 'Batch'),
+('Graph Neural Network', 'Hybrid', 'Hybrid');
+
+-- Tabel transaksi/anak: peringatan_fraud
+INSERT INTO peringatan_fraud (id_model, id_pengguna, waktu_deteksi, skor_fraud, status_peringatan) VALUES
+(1, 1, '2026-10-18 09:15:00', 87.50, 'Baru'),
+(2, 2, '2026-10-18 13:40:00', 62.30, 'Sedang Ditinjau'),
+(3, 3, '2026-10-19 21:05:00', 95.80, 'Baru');
+
+-- =====================================================
+-- 2. [READ] Tampilkan seluruh isi salah satu tabel induk
+-- =====================================================
+SELECT * FROM pengguna;
+
+-- =====================================================
+-- 3. [UPDATE] Ubah satu nilai pada tabel transaksi
+-- WHERE menggunakan Primary Key (id_peringatan)
+-- =====================================================
+UPDATE peringatan_fraud
+SET status_peringatan = 'Selesai'
+WHERE id_peringatan = 2;
+
+-- (Opsional) cek hasil update
+SELECT * FROM peringatan_fraud WHERE id_peringatan = 2;
+
+-- =====================================================
+-- 4. [DELETE] Hapus satu baris pada tabel transaksi
+-- WHERE menggunakan Primary Key (id_peringatan)
+-- =====================================================
+DELETE FROM peringatan_fraud
+WHERE id_peringatan = 3;
+
+-- (Opsional) cek sisa data
+SELECT * FROM peringatan_fraud;
